@@ -117,3 +117,43 @@ async def create_product(user: user_dependency, db: db_dependency, requestBody: 
 
      db.add(product_model)
      db.commit()
+
+
+@router.put('/update/product/{product_id}', status_code=status.HTTP_200_OK)
+async def update_category(user: user_dependency, db: db_dependency,
+                           requestBody: ProductRequest, product_id: int = Path(gt=0)):
+     
+     if user is None or user.get('user_role') != 'admin':
+          raise HTTPException(status_code=401, detail='Auautherized')
+     
+     product_model = db.query(Products).filter(Products.id == product_id).first()
+     if product_model is None:
+          raise HTTPException(status_code=401, detail='Auautherized')
+     
+     product_model.name = requestBody.name
+     product_model.img = requestBody.img
+     product_model.category = requestBody.category
+     product_model.price = requestBody.price
+     product_model.description = requestBody.description
+     product_model.stock = requestBody.stock
+     
+     db.add(product_model)
+     db.commit()
+
+
+@router.put('/update/category/{category_id}', status_code=status.HTTP_200_OK)
+async def update_category(user: user_dependency, db: db_dependency,
+                           requestBody: CategoryRequest, category_id: int = Path(gt=0)):
+     
+     if user is None or user.get('user_role') != 'admin':
+          raise HTTPException(status_code=401, detail='Auautherized')
+     
+     category_model = db.query(Categorys).filter(Categorys.id == category_id).first()
+     if category_model is None:
+          raise HTTPException(status_code=401, detail='Auautherized')
+     
+     category_model.img = requestBody.img
+     category_model.title = requestBody.title
+
+     db.add(category_model)
+     db.commit()
