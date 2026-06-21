@@ -3,8 +3,6 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 from typing import Annotated, List, Optional
 from starlette import status
-from datetime import datetime
-
 from database import SessionLocal
 from models import Cart, CartItem, Products, Users
 from .auth import get_current_user
