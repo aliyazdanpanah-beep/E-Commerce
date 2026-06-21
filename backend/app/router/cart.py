@@ -308,10 +308,6 @@ async def checkout(user: user_dependency, db: db_dependency):
                 "subtotal": item.quantity * item.price_at_add
             })
     
-    # Clear the cart
-    db.query(CartItem).filter(CartItem.cart_id == cart.id).delete()
-    db.commit()
-    
     return {
         "message": "Checkout successful",
         "order_summary": {
