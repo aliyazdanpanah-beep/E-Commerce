@@ -34,18 +34,15 @@ class CartItemResponse(BaseModel):
     quantity: int
     price_at_add: float
     subtotal: float
-    # created_at: datetime
     
     class Config:
-        from_attributes = True  # ✅ This replaces 'orm_mode' in newer Pydantic
+        from_attributes = True
 
 
 class CartResponse(BaseModel):
     id: int
     user_id: int
     is_active: bool
-    # created_at: datetime
-    # updated_at: datetime
     items: List[CartItemResponse]
     total_items: int
     total_price: float
@@ -102,10 +99,8 @@ async def get_cart(user: user_dependency, db: db_dependency):
     if cart is None:
         raise HTTPException(status_code=404, detail="Cart not found")
     
-    # Calculate totals
     total_items, total_price = calculate_cart_totals(cart)
     
-    # Build response items
     items_response = []
     for item in cart.items:
         items_response.append(
@@ -115,7 +110,6 @@ async def get_cart(user: user_dependency, db: db_dependency):
                 quantity=item.quantity,
                 price_at_add=item.price_at_add,
                 subtotal=item.quantity * item.price_at_add,
-                # created_at=item.created_at
             )
         )
     
@@ -123,8 +117,6 @@ async def get_cart(user: user_dependency, db: db_dependency):
         id=cart.id,
         user_id=cart.user_id,
         is_active=cart.is_active,
-        # created_at=cart.created_at,
-        # updated_at=cart.updated_at,
         items=items_response,
         total_items=total_items,
         total_price=total_price

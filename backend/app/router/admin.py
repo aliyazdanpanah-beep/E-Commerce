@@ -87,7 +87,7 @@ async def delete_user(user: user_dependency, db: db_dependency, category_id: int
      db.commit()
 
 
-@router.delete('/delete/product/{category_id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete('/delete/product/{product_id}', status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(user: user_dependency, db: db_dependency, product_id: int):
      if user is None or user.get('user_role') != 'admin':
           raise HTTPException(status_code=401, detail='Auautherized')
