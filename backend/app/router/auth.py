@@ -1,14 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from models import Users
-from database import SessionLocal
-from sqlalchemy.orm import Session
-from passlib.context import CryptContext
 from typing import Annotated
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from starlette import status
 from datetime import timedelta, timezone, datetime
 from jose import jwt, JWTError
+from dependencies import db_dependency, bcrypt_context
 
 
 router = APIRouter(
@@ -19,7 +17,6 @@ router = APIRouter(
 SECRET_KEY = "547582j75345hg53ecj3875646k46fg36jh456753"
 ALGORITHM = "HS256"
 
-bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl='auth/token')
 
 
@@ -37,14 +34,7 @@ class Token(BaseModel):
      token_type: str
 
 
-def get_db():
-     db = SessionLocal()
-     try:
-          yield db
-     finally:
-          db.close()
-
-db_dependency = Annotated[Session, Depends(get_db)]
+# db_dependency = Annotated[Session, Depends(get_db)]
 
 
 def Authenticate_user(username: str, password: str, db):
